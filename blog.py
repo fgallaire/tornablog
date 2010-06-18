@@ -172,10 +172,6 @@ class MarkupHandler(BaseHandler):
             res = txt2tags_wrapper(txt)
         self.write(res)
 
-class MarkdownHandler(BaseHandler):
-    def post(self):
-        txt = self.request.arguments['data'][0]
-        self.write(res)
 
 class EntryModule(tornado.web.UIModule):
     def render(self, entry, show_comments=False):
