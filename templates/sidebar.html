@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block body %}
+  {% block sidebar %}
+    <div id="sidebar">
+      <div class="section">
+<div class="headline">
+{% if handler.settings["facebook"] or handler.settings["email"] or handler.settings["feedburner"] or handler.settings["friendfeed"] %}
+	<img src="/static/images/find-me-on-the-web.png" style="width:139px" alt="Find me on the web"/>
+</div>
+{% end %}
+	<table class="icons">
+	  <tr>
+{% if handler.settings["facebook"] %}
+	    <td><a href="http://www.facebook.com/{{ handler.settings["facebook"] }}" rel="me"><img src="/static/images/facebook-big.png" alt="Facebook"/></a></td>
+  {% end %}
+{% if handler.settings["email"] %}
+	    <td class="last"><a href="mailto:{{ handler.settings["email"] }}" rel="me"><img src="/static/images/gmail-big.png" alt="Email"/></a></td>
+  {% end %}
+	  </tr>
+	  <tr>
+{% if handler.settings["feedburner"] %}
+	    <td><a href="http://feeds.feedburner.com/{{ handler.settings["feedburner"] }}" rel="me"><img src="/static/images/feed-big.png" alt="FeedBurner"/></a></td>
+{% end %}
+{% if handler.settings["twitter"] %}
+	    <td class="last"><a href="http://twitter.com/{{ handler.settings["twitter"] }}" rel="me"><img src="/static/images/twitter-big.png" alt="Twitter"/></a></td>
+{% end %}
+	  </tr>
+	  <tr>
+{% if handler.settings["friendfeed"] %}
+	    <td><a href="http://friendfeed.com/{{ handler.settings["friendfeed"] }}" rel="me"><img src="/static/images/friendfeed-big.png" alt="FriendFeed"/></a></td>
+{% end %}
+{% if handler.settings["groups"] %}
+	    <td class="last"><a href="http://groups.google.com/group/{{ handler.settings["groups"] }}" rel="me"><img src="/static/images/twitter-big.png" alt="Groups"/></a></td>
+{% end %}
+	  </tr>
+	  <tr>
+{% if handler.settings["bitbucket"] %}
+	    <td><a href="http://bitbucket.org/{{ handler.settings["bitbucket"] }}" rel="me"><img src="/static/images/friendfeed-big.png" alt="Bitbucket"/></a></td>
+{% end %}
+	  </tr>
+	</table>
+      </div>
+    </div>
+  {% end %}
+  <div id="entries">{% block content %}{% end %}</div>
+{% end %}

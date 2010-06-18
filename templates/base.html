@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+<link rel="icon" type="image/png" href="static/images/tornablog_favicon.png" />
+    <title>{% block title %}{{ escape(handler.settings["blog_title"]) }}{% end %}</title>
+    <link rel="stylesheet" href="/static/blog.css" type="text/css"/>
+{% if handler.settings["feedburner"] %}
+    <link rel="alternate" href="http://feeds.feedburner.com/{{ handler.settings["feedburner"] }}" type="application/atom+xml" title="{{ escape(handler.settings["blog_title"]) }}"/>
+{% end %}
+    {% block head %}{% end %}
+  </head>
+  <body>
+    <div id="body">
+      <div id="header">
+<div class="menu">
+{% if handler.settings["feedburner"] %}
+<span><a href="http://feeds.feedburner.com/{{ handler.settings['feedburner'] }}"><img src="/static/images/rss.png" style="width:30px" alt="Feed"/></a></span>
+{% end %}
+<span><a href="/archive"><img src="/static/images/archive.png" style="width:57px" alt="Archive"/></a></span>
+<span><a href="/about"><img src="/static/images/about-me.png" style="width:69px" alt="About me"/></a></span>
+</div>
+{% if handler.settings["img_menu"] %}
+	<div class="title"><a href="/"><img src="/static/images/{{ handler.settings["img_menu"] }}"  alt="{{ handler.settings["blog_title"]}}"/></a></div>
+{% else %}
+	<div class="title"><a href="/"><img src="/static/images/blog.png" style="width:48px" alt="{{ handler.settings["blog_title"]}}"/></a></div>
+{% end %}
+      </div>
+      <div id="content">
+{% if handler.settings["img_header"] %}
+<a href="/"><img src="/static/images/{{ handler.settings['img_header'] }}" alt="{{ handler.settings["blog_title"]}}"/></a>
+{% end %}
+{% block body %}{% end %}</div>
+      <div id="footer">
+	&copy;{{ datetime.datetime.utcnow().year }} {{ escape(handler.settings["name"]) }}
+<br/>
+{% if handler.settings["cc_type"] and handler.settings["cc_lang"] %}
+<a href="http://creativecommons.org/licenses/{{ handler.settings["cc_type"] }}/{{ handler.settings["cc_version"] }}/deed.{{ handler.settings["cc_lang"] }}"><img src="http://i.creativecommons.org/l/{{ handler.settings["cc_type"] }}/{{ handler.settings["cc_version"] }}/80x15.png" alt="Creative Commons {{ handler.settings['cc_type'] }}"></a>
+{% elif handler.settings["cc_type"]  %}
+<a href="http://creativecommons.org/licenses/{{ handler.settings["cc_type"] }}/{{ handler.settings["cc_version"] }}"><img src="http://i.creativecommons.org/l/{{ handler.settings["cc_type"] }}/{{ handler.settings["cc_version"] }}/80x15.png" alt="Creative Commons {{ handler.settings['cc_type'] }}"></a>
+{% end %}
+	{% if current_user %} - <a href="{{ users.create_logout_url(request.uri) }}">Sign out</a>{% end %}
+      </div>
+    </div>
+    {% block bottom %}{% end %}
+    {% if not handler.settings["debug"] and handler.settings["analytics"] %}
+      <script type="text/javascript">
+	document.write(unescape("%3Cscript src='" + ((document.location.protocol == "https:") ? "https://ssl." : "http://www.") + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+      //<![CDATA[
+
+	try {
+	  var pageTracker = _gat._getTracker("{{ handler.settings['analytics'] }}");
+	  pageTracker._trackPageview();
+	} catch(e) {}
+
+      //]]>
+      </script>
+    {% end %}
+  </body>
+</html>

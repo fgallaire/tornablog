@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="/static/admin.css" type="text/css"/> 
+<!-- jQuery -->
+<script type="text/javascript" src="/static/jquery-1.4.2.min.js"></script>
+<!-- markItUp! -->
+<script type="text/javascript" src="/static/markitup/jquery.markitup.js"></script>
+<!-- markItUp! skin -->
+<link rel="stylesheet" type="text/css" href="/static/markitup/skins/simple/style.css" /> 
+<!-- markItUp! toolbar settings -->
+<script type="text/javascript" src="/static/markitup/sets/{{ handler.settings['markup'] }}/set.js"></script>
+<!--  markItUp! toolbar skin -->
+<link rel="stylesheet" type="text/css" href="/static/markitup/sets/{{ handler.settings['markup'] }}/style.css" />
+{% end %}
+
+{% block body %}
+<script type="text/javascript">
+<!--
+$(document).ready(function()	{
+	// Add markItUp! to your textarea in one line
+	// $('textarea').markItUp( { Settings }, { OptionalExtraSettings } );
+	$('#markItUp').markItUp(mySettings);
+	
+	// You can add content from anywhere in your page
+	// $.markItUp( { Settings } );	
+	$('.add').click(function() {
+ 		$.markItUp( { 	openWith:'<opening tag>',
+						closeWith:'<\/closing tag>',
+						placeHolder:"New content"
+					}
+				);
+ 		return false;
+	});
+	
+	// And you can add/remove markItUp! whenever you want
+	// $(textarea).markItUpRemove();
+	$('.toggle').click(function() {
+		if ($("#markItUp.markItUpEditor").length === 1) {
+ 			$("#markItUp").markItUpRemove();
+			$("span", this).text("get markItUp! back");
+		} else {
+			$('#markItUp').markItUp(mySettings);
+			$("span", this).text("remove markItUp!");
+		}
+ 		return false;
+	});
+});
+-->
+</script>
+  <form action="{{ request.path }}" method="post" class="compose">
+    <div style="margin-bottom:5px"><input name="title" type="text" class="title" value="{{ escape(entry.title) if entry else "" }}"/></div>
+    <div style="margin-bottom:5px"><textarea  id="markItUp" name="markup" rows="30" cols="40" class="markup">{{ escape(entry.body) if entry else "" }}</textarea></div>
+    <div>
+{% if handler.settings["markup"] == "markdown" %}
+      <div style="float:right"><a href="http://daringfireball.net/projects/markdown/syntax">{{ _("Markdown syntax documentation") }}</a></div>
+{% elif handler.settings["markup"] == "txt2tags" %}
+      <div style="float:right"><a href="http://txt2tags.sourceforge.net/markup.html">{{ _("Txt2tags syntax documentation") }}</a></div>
+{% end %}
+      <input type="submit" value="{{ _("Save changes") if entry else _("Publish post") }}" class="submit"/>
+      &nbsp;<a href="{{ "/entry/" + entry.slug if entry else "/" }}">{{ _("Cancel") }}</a>
+    </div>
+    {% if entry %}
+      <input type="hidden" name="key" value="{{ str(entry.key()) }}"/>
+    {% end %}
+    {{ xsrf_form_html() }}
+  </form>
+{% end %}
+
+{% block bottom %}
+  <script type="text/javascript">
+  //<![CDATA[
+
+    $(function() {
+      $("input[name=title]").select();
+      $("form.compose").submit(function() {
+          var required = ["title", "markup"];
+          var form = $(this).get(0);
+          for (var i = 0; i < required.length; i++) {
+              if (!form[required[i]].value) {
+                  $(form[required[i]]).select();
+                  return false;
+              }
+          }
+          return true;
+      });
+    });
+
+  //]]>
+  </script>
+{% end %}

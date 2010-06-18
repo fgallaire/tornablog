@@ -1,0 +1,15 @@
+{% extends "sidebar.html" %}
+
+{% block title %}About {{ escape(handler.settings["name"]) }}{% end %}
+
+{% block content %}
+  <h1 style="margin-bottom:6pt">About {{ escape(handler.settings["name"]) }}</h1>
+
+{% if handler.settings["name"] %}
+My name is {{ handler.settings["name"] }} and I love free software.
+{% end %}
+<br/>
+{% if handler.settings["email"] %}
+You can reach me at <a href="mailto:{{ handler.settings['email'] }}">{{ handler.settings["email"] }}</a>.
+{% end %}
+{% end %}
